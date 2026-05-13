@@ -14,7 +14,7 @@ The app has two types of users:
 - **Farmers** — post crops, track deliveries, get paid
 - **Buyers** — browse listings, place orders, verify produce quality
 
-The coolest feature is the **AI crop quality checker** — you upload a photo of a crop and Claude (Anthropic's AI) analyses it and gives you a quality grade, freshness score, and a fair price suggestion.
+The coolest feature is the **AI crop quality checker** — you upload a photo of a crop and Anthropic's AI analyses it and gives you a quality grade, freshness score, and a fair price suggestion.
 
 ---
 
