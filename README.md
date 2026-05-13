@@ -1,4 +1,4 @@
-# FreshLink 🌾
+# FreshLink🌾
 
 A farm-to-buyer web platform built to help farmers in Tamil Nadu sell their produce directly to buyers — no middlemen, fair prices, and instant payments.
 
