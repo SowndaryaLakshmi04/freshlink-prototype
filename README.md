@@ -35,7 +35,6 @@ The coolest feature is the **AI crop quality checker** — you upload a photo of
 **AI Quality Check** 🤖
 - Upload a crop photo
 - Get back: quality grade (A/B/C), freshness score, defect notes, and a suggested price range
-- Powered by Claude (`claude-sonnet-4-20250514`) via the Anthropic API
 
 **Other stuff**
 - Dark mode
@@ -50,7 +49,7 @@ The coolest feature is the **AI crop quality checker** — you upload a photo of
 |---|---|
 | HTML / CSS / JS | No frameworks — just vanilla web |
 | Charts | Chart.js 4.4 |
-| AI | Anthropic Claude API |
+| AI | Anthropic API |
 | Backend | None (frontend-only demo) |
 
 ---
@@ -62,7 +61,7 @@ freshlink/
 ├── index.html              # All the pages and UI
 ├── style.css               # Styling (includes dark mode)
 ├── app.js                  # All the logic + AI integration
-└── freshlink-logo-nobg.png # Logo
+└── freshlink-logo.png      # Logo
 ```
 
 ---
@@ -92,6 +91,6 @@ On the login screen, hit **Quick demo login** to sign in as one of these test ac
 
 ## Acknowledgements
 
-- AI powered by [Anthropic Claude](https://www.anthropic.com)
+- AI powered by [Anthropic](https://www.anthropic.com)
 - Charts by [Chart.js](https://www.chartjs.org)
 - Built with love for Tamil Nadu's farming community 🌾
