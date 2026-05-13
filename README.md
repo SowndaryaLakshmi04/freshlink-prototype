@@ -55,22 +55,6 @@ The coolest feature is the **AI crop quality checker** — you upload a photo of
 
 ---
 
-## How to Run
-
-Just open `index.html` in your browser. That's it — no npm install, no build step.
-
-```bash
-git clone https://github.com/your-username/freshlink.git
-cd freshlink
-open index.html
-```
-
-If you want the AI feature to work, you'll need an Anthropic API key. Open `app.js`, find the `fetch('https://api.anthropic.com/v1/messages', ...)` call, and add your key to the headers.
-
-> ⚠️ Don't commit your API key to GitHub! Use environment variables or a proxy server if you're deploying this.
-
----
-
 ## File Structure
 
 ```
