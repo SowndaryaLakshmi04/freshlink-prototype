@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreshLink — Farm to Buyer Platform</title>
+  <meta name="theme-color" content="#1a6b3c">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== LOGIN SCREEN ===================== -->
+<div id="loginScreen">
+  <div class="login-bg">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+  </div>
+  <div class="login-container">
+    <div class="login-left">
+      <div class="login-logo-wrap">
+        <img src="freshlink-logo-nobg.png" alt="FreshLink" class="login-logo-img">
+      </div>
+      <div class="login-tagline">Farm to Buyer.<br>Direct. Transparent. Fair.</div>
+      <div class="login-features">
+        <div class="lf-item"><span>🌾</span> Post harvests &amp; get fair prices</div>
+        <div class="lf-item"><span>🚚</span> Live GPS shipment tracking</div>
+        <div class="lf-item"><span>💰</span> Instant escrow payments</div>
+        <div class="lf-item"><span>🤖</span> AI crop quality analysis</div>
+        <div class="lf-item"><span>🛒</span> Connect directly with buyers</div>
+      </div>
+      <div class="login-stats-row">
+        <div class="ls-stat"><div class="ls-num">2,400+</div><div class="ls-lbl">Farmers</div></div>
+        <div class="ls-stat"><div class="ls-num">₹4.2Cr</div><div class="ls-lbl">Transacted</div></div>
+        <div class="ls-stat"><div class="ls-num">18</div><div class="ls-lbl">Districts</div></div>
+      </div>
+    </div>
+    <div class="login-right">
+      <div class="login-card">
+        <div class="login-card-title">Sign in to FreshLink</div>
+        <div class="login-card-sub">Select your role to get started</div>
+        <div class="role-selector">
+          <div class="role-option active" id="roleOptFarmer" onclick="selectLoginRole('farmer')">
+            <div class="role-opt-icon">🌾</div>
+            <div class="role-opt-label">Farmer</div>
+            <div class="role-opt-sub">Post &amp; sell your harvest</div>
+          </div>
+          <div class="role-option" id="roleOptBuyer" onclick="selectLoginRole('buyer')">
+            <div class="role-opt-icon">🛒</div>
+            <div class="role-opt-label">Buyer</div>
+            <div class="role-opt-sub">Browse &amp; purchase produce</div>
+          </div>
+        </div>
+        <div class="demo-accounts">
+          <div class="demo-label">⚡ Quick demo login</div>
+          <div class="demo-grid" id="demoGrid"></div>
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label>Your Name</label>
+          <input type="text" id="loginName" placeholder="Enter your name">
+        </div>
+        <div class="form-group" style="margin-bottom:1.5rem;">
+          <label>Phone Number</label>
+          <div class="phone-row">
+            <span class="phone-prefix">+91</span>
+            <input type="tel" id="loginPhone" placeholder="9876543210" maxlength="10">
+          </div>
+        </div>
+        <button class="btn btn-primary login-btn" onclick="doLogin()">Sign In →</button>
+        <div class="login-note">Demo only — no real data stored</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MAIN APP ===================== -->
+<div id="mainApp" style="display:none;">
+
+  <nav id="mainNav">
+    <div class="logo" onclick="goHome()" style="cursor:pointer;">
+      <img src="freshlink-logo-nobg.png" alt="FreshLink" class="nav-logo-img">
+    </div>
+    <div class="nav-tabs" id="navTabs"></div>
+    <div class="nav-right">
+      <button class="nav-icon-btn" id="notifBtn" onclick="toggleNotifPanel()">🔔<span class="notif-dot" id="notifDot" style="display:none;"></span></button>
+      <button class="nav-icon-btn" id="themeBtn" onclick="toggleDarkMode()">🌙</button>
+      <select class="lang-select" onchange="applyLanguage(this.value)">
+        <option value="en">EN</option><option value="ta">தமிழ்</option><option value="hi">हिंदी</option>
+      </select>
+      <div class="user-pill" id="userPill"></div>
+      <button class="switch-btn logout-btn" id="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="notif-panel" id="notifPanel">
+    <div class="notif-header"><span>Notifications</span><span class="notif-clear" onclick="clearNotifications()">Clear all</span></div>
+    <div id="notifBody"></div>
+  </div>
+
+  <!-- FARMER DASHBOARD -->
+  <div class="page" id="page-dashboard">
+    <div class="hero hero-farmer">
+      <h1 id="heroTitle">Welcome back! 👋</h1>
+      <p>You have 2 active listings. Tomato prices are up 12% this week in Villupuram mandi.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">₹18,500</div><div class="lbl" id="stat-earned-lbl">Earned this month</div></div>
+        <div class="hero-stat"><div class="num">3</div><div class="lbl" id="stat-listings-lbl">Active listings</div></div>
+        <div class="hero-stat"><div class="num">7</div><div class="lbl" id="stat-delivered-lbl">Deliveries done</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon">📈</div> Farm Analytics</div>
+      <div class="chart-grid">
+        <div class="chart-box"><h4>Revenue Trend (Last 30 Days)</h4><div class="chart-container"><canvas id="revenueChart"></canvas></div></div>
+        <div class="chart-box"><h4>Crop Distribution</h4><div class="chart-container"><canvas id="cropChart"></canvas></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon">💬</div> Success Stories</div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card"><div class="stars">★★★★★</div><div class="testimonial-text">FreshLink helped me sell 2.5 tons of tomatoes in 3 days at a better price than the local mandi!</div><div class="testimonial-author"><div class="author-avatar">R</div><div><div class="author-name">Rajan Kumar</div><div class="author-loc">📍 Kallakurichi</div></div></div></div>
+        <div class="testimonial-card"><div class="stars">★★★★★</div><div class="testimonial-text">The escrow payment is a game changer. Money hits my account in 60 seconds after delivery!</div><div class="testimonial-author"><div class="author-avatar">M</div><div><div class="author-name">Murugan S</div><div class="author-loc">📍 Cuddalore</div></div></div></div>
+        <div class="testimonial-card"><div class="stars">★★★★★</div><div class="testimonial-text">I plan my harvest based on buyer demand now. FreshLink shows what's selling fast before I pick!</div><div class="testimonial-author"><div class="author-avatar">L</div><div><div class="author-name">Lakshmi A</div><div class="author-loc">📍 Villupuram</div></div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon">📦</div> <span id="form-title-lbl">Post Your Harvest</span></div>
+      <div class="form-grid">
+        <div class="form-group"><label id="form-crop-lbl">Crop Name</label><select id="cropName"><option>Tomato</option><option>Onion</option><option>Potato</option><option>Brinjal</option><option>Banana</option><option>Chilli</option><option>Sugarcane</option><option>Mango</option><option>Coconut</option></select></div>
+        <div class="form-group"><label id="form-qty-lbl">Quantity (kg)</label><input type="number" id="cropQty" placeholder="e.g. 500" min="1"></div>
+        <div class="form-group"><label id="form-price-lbl">Your Price (₹/kg)</label><input type="number" id="cropPrice" placeholder="e.g. 12" min="1"></div>
+        <div class="form-group"><label id="form-date-lbl">Harvest Date</label><input type="date" id="harvestDate"></div>
+        <div class="form-group"><label id="form-location-lbl">Village / Location</label><input type="text" id="location" placeholder="e.g. Kallakurichi" value="Kallakurichi"></div>
+        <div class="form-group"><label id="form-quality-lbl">Quality Grade</label><select id="quality"><option>Grade A (Premium)</option><option>Grade B (Standard)</option><option>Grade C (Processing)</option></select></div>
+
+        <!-- ✅ CROP PHOTO UPLOAD -->
+        <div class="form-group full">
+          <label id="form-photo-lbl">Crop Photo</label>
+          <div class="harvest-drop-zone" id="harvestDropZone"
+            onclick="document.getElementById('harvestImageInput').click()"
+            ondragover="handleHarvestDragOver(event)"
+            ondrop="handleHarvestDrop(event)">
+            <div class="harvest-drop-icon">📷</div>
+            <div class="harvest-drop-title" id="cropImageUploadHint">Tap to upload a photo of your crop</div>
+            <div class="harvest-drop-sub" id="cropImageUploadSub">JPG, PNG • Max 5MB</div>
+            <input type="file" id="harvestImageInput" accept="image/*" style="display:none" onchange="handleHarvestImageSelect(event)">
+          </div>
+          <div class="harvest-img-wrap" id="harvestImgWrap" style="display:none;">
+            <img id="harvestImgPreview" class="harvest-img-preview" alt="Crop photo">
+            <button class="img-remove-btn" onclick="removeHarvestImage()">✕ Remove</button>
+          </div>
+        </div>
+
+        <div class="form-group full"><label id="form-notes-lbl">Additional Notes</label><textarea id="notes" placeholder="e.g. Organically grown, no pesticides..."></textarea></div>
+      </div>
+      <div style="margin-top:1rem;display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary" id="form-post-btn" onclick="postListing()">🚀 Post Listing</button>
+        <button class="btn btn-outline" id="form-clear-btn" onclick="clearForm()">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUYER DASHBOARD -->
+  <div class="page" id="page-buyerdashboard">
+    <div class="hero hero-buyer">
+      <h1 id="buyerHeroTitle">Welcome back! 👋</h1>
+      <p>Fresh produce from Tamil Nadu farms — directly to you. No middlemen.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">₹24,600</div><div class="lbl" id="bstat-purchased-lbl">Purchased this month</div></div>
+        <div class="hero-stat"><div class="num">4</div><div class="lbl" id="bstat-orders-lbl">Active orders</div></div>
+        <div class="hero-stat"><div class="num">₹6,200</div><div class="lbl" id="bstat-saved-lbl">Saved vs mandi</div></div>
+      </div>
+    </div>
+    <div class="buyer-ai-shortcut" onclick="showPage('qualitycheck')">
+      <div class="bai-icon">🤖</div>
+      <div class="bai-text">
+        <div class="bai-title" id="buyer-ai-title">Verify Received Produce with AI</div>
+        <div class="bai-sub" id="buyer-ai-sub">Upload a photo of delivered produce to check quality before confirming &amp; releasing payment</div>
+      </div>
+      <div class="bai-arrow">→</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon">📊</div> Purchase Analytics</div>
+      <div class="chart-grid">
+        <div class="chart-box"><h4>Spending Trend (Last 30 Days)</h4><div class="chart-container"><canvas id="buyerSpendChart"></canvas></div></div>
+        <div class="chart-box"><h4>Produce Categories</h4><div class="chart-container"><canvas id="buyerCropChart"></canvas></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon">📋</div> Purchase Summary</div>
+      <div class="summary-row"><div class="lbl" id="bsum-orders">Orders placed this month</div><div class="val">4</div></div>
+      <div class="summary-row"><div class="lbl" id="bsum-total">Total produce bought</div><div class="val">1,200 kg</div></div>
+      <div class="summary-row"><div class="lbl" id="bsum-paid">Amount paid</div><div class="val green">₹24,600</div></div>
+      <div class="summary-row"><div class="lbl" id="bsum-saved">Saved vs mandi price</div><div class="val green">₹6,200 (20%)</div></div>
+      <div class="summary-row"><div class="lbl" id="bsum-ontime">On-time deliveries</div><div class="val green">100%</div></div>
+    </div>
+  </div>
+
+  <!-- MARKETPLACE -->
+  <div class="page" id="page-listings">
+    <div class="section-header">
+      <h2 id="marketplace-title">🌿 Marketplace</h2>
+      <div class="filter-row">
+        <input type="text" id="searchInput" placeholder="Search crop..." oninput="filterListings()">
+        <select id="filterStatus" onchange="filterListings()">
+          <option value="">All Status</option><option value="available">Available</option>
+          <option value="transit">In Transit</option><option value="delivered">Delivered</option>
+        </select>
+      </div>
+    </div>
+    <div class="listing-grid" id="listingGrid"></div>
+  </div>
+
+  <!-- TRACKING -->
+  <div class="page" id="page-tracking">
+    <div class="section-header"><h2 id="tracking-title">🚚 Live Order Tracking</h2></div>
+    <div class="tab-bar">
+      <button class="tab-btn track-tab-btn active" onclick="switchTrackTab('all',this)">All Orders</button>
+      <button class="tab-btn track-tab-btn" onclick="switchTrackTab('active',this)">Active</button>
+      <button class="tab-btn track-tab-btn" onclick="switchTrackTab('completed',this)">Completed</button>
+    </div>
+    <div id="trackingList"></div>
+  </div>
+
+  <!-- PAYMENTS -->
+  <div class="page" id="page-payment">
+    <div class="section-header"><h2 id="payment-title">💰 Payments &amp; Escrow</h2></div>
+    <div class="alert alert-info" id="payment-notice">🔒 All payments are held in secure escrow. Funds release to the farmer only after the buyer confirms delivery.</div>
+    <div id="paymentList"></div>
+  </div>
+
+  <!-- AI QUALITY CHECK -->
+  <div class="page" id="page-qualitycheck">
+    <div class="section-header"><h2 id="ai-page-title">🤖 AI Crop Quality Check</h2></div>
+    <div class="ai-intro-banner">
+      <div class="ai-intro-icon">🧠</div>
+      <div>
+        <div class="ai-intro-title" id="ai-powered-lbl">AI-Powered Quality Check</div>
+        <div class="ai-intro-sub" id="aiIntroSub">Upload a photo of your crop to get an instant quality report, grade, and fair price suggestion.</div>
+      </div>
+    </div>
+    <div class="ai-layout">
+      <div class="card ai-upload-card">
+        <div class="card-title"><div class="icon">📷</div> <span id="ai-upload-title">Upload Crop Photo</span></div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label id="ai-crop-lbl">Crop Type</label>
+          <select id="aiCropType"><option>Tomato</option><option>Onion</option><option>Banana</option><option>Chilli</option><option>Potato</option><option>Brinjal</option><option>Mango</option><option>Coconut</option></select>
+        </div>
+        <div id="buyerOrderRef" style="display:none;" class="form-group" style="margin-bottom:1rem;">
+          <label id="ai-order-lbl">Linked Order (optional)</label>
+          <select id="aiLinkedOrder">
+            <option value="">— Select order to link —</option>
+            <option value="FL001">FL001 · Tomato · 500kg · Rajan Kumar</option>
+            <option value="FL003">FL003 · Banana · 800kg · Lakshmi A</option>
+          </select>
+        </div>
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('cropImageInput').click()" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
+          <div class="drop-icon">🌿</div>
+          <div class="drop-title" id="drop-title-text">Tap to upload or drag &amp; drop</div>
+          <div class="drop-sub" id="drop-sub-text">JPG, PNG, WEBP • Max 10MB</div>
+          <input type="file" id="cropImageInput" accept="image/*" style="display:none" onchange="handleImageSelect(event)">
+        </div>
+        <div class="img-preview-wrap" id="imgPreviewWrap" style="display:none;">
+          <img id="imgPreview" class="img-preview" alt="Crop preview">
+          <button class="img-remove-btn" onclick="removeImage()">✕ Remove</button>
+        </div>
+        <button class="btn btn-primary" style="width:100%;margin-top:1rem;justify-content:center;" onclick="runAIQualityCheck()" id="analyzeBtn" disabled>🔍 Analyse with AI</button>
+        <div class="ai-disclaimer" id="ai-disclaimer-text">ℹ️ AI analysis is for guidance only. Always do a physical check before finalising.</div>
+      </div>
+      <div class="ai-result-panel">
+        <div class="ai-empty" id="aiEmpty">
+          <div style="font-size:52px;">📸</div>
+          <div style="font-size:15px;font-weight:600;margin-top:14px;color:var(--text);" id="ai-empty-title">No image analysed yet</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:6px;text-align:center;" id="ai-empty-sub">Upload a crop photo and click Analyse</div>
+        </div>
+        <div class="ai-loading" id="aiLoading" style="display:none;">
+          <div class="ai-spinner"></div>
+          <div class="ai-loading-text" id="ai-loading-text">Analysing your crop...</div>
+          <div class="ai-loading-sub" id="ai-loading-sub-text">Checking freshness, defects, grade &amp; price...</div>
+        </div>
+        <div id="aiResult" style="display:none;">
+          <div class="result-header">
+            <div><div class="result-crop-name" id="rCropName">—</div><div class="result-timestamp" id="rTimestamp"></div></div>
+            <div class="result-grade-badge" id="rGradeBadge">Grade A</div>
+          </div>
+          <div class="score-section">
+            <div class="score-label-row"><span>Overall Quality Score</span><span class="score-num" id="rScore">—</span></div>
+            <div class="score-bar-bg"><div class="score-bar-fill" id="rScoreBar" style="width:0%"></div></div>
+          </div>
+          <div class="sub-scores" id="rSubScores"></div>
+          <div class="price-suggestion">
+            <div class="price-sugg-label">💰 Suggested Market Price</div>
+            <div class="price-sugg-value" id="rPrice">₹—/kg</div>
+            <div class="price-sugg-range" id="rPriceRange">Range: —</div>
+          </div>
+          <div class="findings-section"><div class="findings-title">📋 Detailed Findings</div><div id="rFindings" class="findings-list"></div></div>
+          <div class="findings-section" style="margin-top:1rem;"><div class="findings-title">✅ Recommendations</div><div id="rRecommendations" class="findings-list"></div></div>
+          <div id="aiActionButtons" style="display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" id="pastAnalysesCard" style="margin-top:1.5rem;display:none;">
+      <div class="card-title"><div class="icon">🕐</div> Past Analyses This Session</div>
+      <div id="pastAnalysesList"></div>
+    </div>
+  </div>
+
+</div><!-- end mainApp -->
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
